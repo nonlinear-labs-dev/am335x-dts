@@ -38,6 +38,24 @@
 			hw-rev = "2D";
 		};
 
+		gpio-poweroff {
+			compatible = "gpio-poweroff";
+			gpios = <&gpio0 23 GPIO_ACTIVE_HIGH>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_poweroff_pins>;
+		};
+
+		gpio-keys {
+			compatible = "gpio-keys";
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_gpio_keys>;
+
+			power {
+				label = "Power Button";
+				gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+				linux,code = <116>; // KEY_POWER
+			};
+		};
 	};
 
 	&ldo3_reg {
@@ -59,49 +77,59 @@
 	ti,vcc-aux-disable-is-sleep;
 	};
 
-
-
 	&am33xx_pinmux {
-	pinctrl-0 = <&pinctrl_lpc_bb_sp1>;
+		pinctrl-0 = <&pinctrl_lpc_bb_sp1>;
 
-	pinctrl_lpc_bb_sp1: pinmux_lpc_bb_sp1_pin {
-		pinctrl-single,pins = < 0x1B4 0x7 >;
-	};
+		pinctrl_lpc_bb_sp1: pinmux_lpc_bb_sp1_pin {
+			pinctrl-single,pins = < 0x1B4 0x7 >;
+		};
 
-	/*NL_nni: SPI1 (ADC) & SPI0 added */
-	pinctrl_spi0: pinmux_spi0_pins {
-		pinctrl-single,pins = <
-			0x150 0x30	/* SPI0_CLK */
-			0x154 0x30	/* SPI0_D0 */
-			0x158 0x10	/* SPI0_D1 */
-			0x15C 0x17 /* SPI0_CS0 */
-			/* 0x15C 0x10 /* SPI0_CS0 */
-			0x178 0x37	/* LPC_PRQ uart1_ctsn.gpio0_12, INPUT | MODE7 */
-			0x17C 0x37	/* LPC_RDY uart1_rtsn.gpio0_13, INPUT | MODE7 */
-			0x164 0x37	/* LPC_HB */
-		>;
-	};
+		pinctrl_gpio_keys: pinmux_gpio_keys_pins {
+			pinctrl-single,pins = <
+				0x030 0x2f	/* GPIO1_12 BBB_Control_Pin */
+			>;
+		};
 
-	pinctrl_spi1: pinmux_spi1_pins {
-		pinctrl-single,pins = <
-			0x190 0x23	/* SPI1_CLK */
-			0x194 0x23	/* SPI1_D0 */
-			0x198 0x13	/* SPI1_D1 */
-			/* 0x19C 0x13	 SPI1_CS0 - used by mSPI */
-			0x19C 0x17	/* ESPI_SAP */
-			0x44  0x17	/* ESPI_DMX */
-			0x1A4 0x2F	 /* P9_27 should be input */
-			0x8C 0x7	/* OLED_DC gpmc_clk_mux0.gpio2_1, OUTPUT | MODE7 */
-			0x28 0x7	/* OLED_CS gpmc_ad10.gpio0_26, OUTPUT | MODE7 */
-			0x3c 0x7	/* ADC_CS gpmc_ad15.gpio1_15, OUTPUT | MODE7 */
-			0x184 0x7	/* SCS0_A..C */
-			0x1AC 0x7
-			0x180 0x7
-			0x70 0x7	/* SCS1_A..C */
-			0x78 0x7
-			0x74 0x7
-		>;
-	};
+		pinctrl_poweroff_pins: pinmux_gpio_poweroff_pins {
+			pinctrl-single,pins = <
+				0x024 0x0f	/* GPIO0_23 BBB_Alive_Pin */
+			>;
+		};
+
+		/*NL_nni: SPI1 (ADC) & SPI0 added */
+		pinctrl_spi0: pinmux_spi0_pins {
+			pinctrl-single,pins = <
+				0x150 0x30	/* SPI0_CLK */
+				0x154 0x30	/* SPI0_D0 */
+				0x158 0x10	/* SPI0_D1 */
+				0x15C 0x17 /* SPI0_CS0 */
+				/* 0x15C 0x10 /* SPI0_CS0 */
+				0x178 0x37	/* LPC_PRQ uart1_ctsn.gpio0_12, INPUT | MODE7 */
+				0x17C 0x37	/* LPC_RDY uart1_rtsn.gpio0_13, INPUT | MODE7 */
+				0x164 0x37	/* LPC_HB */
+			>;
+		};
+
+		pinctrl_spi1: pinmux_spi1_pins {
+			pinctrl-single,pins = <
+				0x190 0x23	/* SPI1_CLK */
+				0x194 0x23	/* SPI1_D0 */
+				0x198 0x13	/* SPI1_D1 */
+				/* 0x19C 0x13	 SPI1_CS0 - used by mSPI */
+				0x19C 0x17	/* ESPI_SAP */
+				0x44  0x17	/* ESPI_DMX */
+				0x1A4 0x2F	 /* P9_27 should be input */
+				0x8C 0x7	/* OLED_DC gpmc_clk_mux0.gpio2_1, OUTPUT | MODE7 */
+				0x28 0x7	/* OLED_CS gpmc_ad10.gpio0_26, OUTPUT | MODE7 */
+				0x3c 0x7	/* ADC_CS gpmc_ad15.gpio1_15, OUTPUT | MODE7 */
+				0x184 0x7	/* SCS0_A..C */
+				0x1AC 0x7
+				0x180 0x7
+				0x70 0x7	/* SCS1_A..C */
+				0x78 0x7
+				0x74 0x7
+			>;
+		};
 	};
 
 	/* NL_nni: SPI1 & SPI0 added */
