@@ -86,7 +86,7 @@
 
 		pinctrl_gpio_keys: pinmux_gpio_keys_pins {
 			pinctrl-single,pins = <
-				0x030 0x2f	/* GPIO1_12 BBB_Control_Pin */
+				0x030 0x37	/* GPIO1_12 BBB_Control_Pin */
 			>;
 		};
 
