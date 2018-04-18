@@ -28,6 +28,7 @@ DEPFILE = $(subst $(COMMA),_,$(DOT_TARGET).d)
 DTC_FLAGS := -p 1024
 
 dtc_cpp_flags  = -E -Wp,-MD,$@.pre.tmp -nostdinc			\
+		 -I$(LINUX_DIR)/include					\
                  -I$(LINUX_DIR)/arch/$(SRCARCH)/boot/dts		\
                  -I$(LINUX_DIR)/arch/$(SRCARCH)/boot/dts/include	\
                  -I$(LINUX_DIR)/drivers/of/testcase-data		\
