@@ -151,7 +151,7 @@
       0x0C0 0x0C  /* UART5_TXD : OUTPUT | MODE4           0b0000-1100 */
       0x0C4 0x24  /* UART5_RXD : INPUT  | PULLUP | MODE4  0b0011-0100 */
     >;
-  }
+  };
 };
 
 /* NL_nni: SPI1 & SPI0 added */
