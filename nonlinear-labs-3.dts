@@ -213,6 +213,6 @@
 &uart5
 {
   pinctrl-names = "default";
-  pinctrl-0 = <&uart5_pins>;
+  pinctrl-0 = <&pinctrl_uart5>;
   status = "okay";
 };
