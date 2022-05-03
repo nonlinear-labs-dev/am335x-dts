@@ -148,10 +148,10 @@
   uart5_pins: pinmux_uart0_pins
   {
     pinctrl-single,pins = <
-			0x170 (PIN_INPUT_PULLUP | MUX_MODE4)
-			0x174 (PIN_OUTPUT_PULLDOWN | MUX_MODE4)
-		>;
-	};
+      0x0C0 (PIN_OUTPUT_PULLDOWN | MUX_MODE4)  /* uart5_TXD */
+      0x0C4 (PIN_INPUT_PULLUP    | MUX_MODE4)  /* uart5_RXD */
+    >;
+  };
 };
 
 /* NL_nni: SPI1 & SPI0 added */
@@ -212,7 +212,7 @@
 /* KSTR : UART5 added */
 &uart5
 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&uart5_pins>;
-	status = "okay";
+  pinctrl-names = "default";
+  pinctrl-0 = <&uart5_pins>;
+  status = "okay";
 };
