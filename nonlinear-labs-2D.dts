@@ -11,174 +11,208 @@
 #include "am335x-bone-common.dtsi"
 
 
-	/ {
-		/* Adapting LEDS to HW 2D */
-		leds {
-			led@2 {
-				/* Linux HB */
-				gpios = <&gpio2 2 GPIO_ACTIVE_HIGH>;
-			};
-			led@6 {
-				label = "espi_driver_status";
-				gpios = <&gpio2 5 GPIO_ACTIVE_HIGH>;
-				default-state = "off";
-			};
-			led@8 {
-				label = "nlaudiocontrol_status";
-				gpios = <&gpio2 4 GPIO_ACTIVE_HIGH>;
-				default-state = "off";
-			};
-			led@7 {
-				label = "playground_status";
-				gpios = <&gpio2 3 GPIO_ACTIVE_HIGH>;
-				default-state = "off";
-			};
-		};
-		nonlinear {
-			hw-rev = "2D";
-		};
+/ {
+  /* Adapting LEDS to HW 2D */
+  leds {
+    led@2 {
+      /* Linux HB */
+      gpios = <&gpio2 2 GPIO_ACTIVE_HIGH>;
+    };
+    led@6 {
+      label = "espi_driver_status";
+      gpios = <&gpio2 5 GPIO_ACTIVE_HIGH>;
+      default-state = "off";
+    };
+    led@8 {
+      label = "nlaudiocontrol_status";
+      gpios = <&gpio2 4 GPIO_ACTIVE_HIGH>;
+      default-state = "off";
+    };
+    led@7 {
+      label = "playground_status";
+      gpios = <&gpio2 3 GPIO_ACTIVE_HIGH>;
+      default-state = "off";
+    };
+  };
+  nonlinear
+  {
+    hw-rev = "2D";
+  };
 
-		gpio-poweroff {
-			compatible = "gpio-poweroff";
-			gpios = <&gpio0 23 GPIO_ACTIVE_LOW>;
-			pinctrl-names = "default";
-			pinctrl-0 = <&pinctrl_poweroff_pins>;
-		};
+  gpio-poweroff
+  {
+    compatible = "gpio-poweroff";
+    gpios = <&gpio0 23 GPIO_ACTIVE_LOW>;
+    pinctrl-names = "default";
+    pinctrl-0 = <&pinctrl_poweroff_pins>;
+  };
 
-		gpio-keys {
-			compatible = "gpio-keys";
-			pinctrl-names = "default";
-			pinctrl-0 = <&pinctrl_gpio_keys>;
+  gpio-keys
+  {
+    compatible = "gpio-keys";
+    pinctrl-names = "default";
+    pinctrl-0 = <&pinctrl_gpio_keys>;
 
-			power {
-				label = "Power Button";
-				gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
-				linux,code = <116>; // KEY_POWER
-			};
-		};
-	};
+    power
+    {
+      label = "Power Button";
+      gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+      linux,code = <116>; // KEY_POWER
+    };
+  };
+};
 
-	&ldo3_reg {
-	regulator-min-microvolt = <1800000>;
-	regulator-max-microvolt = <1800000>;
-	regulator-always-on;
-	};
+&ldo3_reg
+{
+  regulator-min-microvolt = <1800000>;
+  regulator-max-microvolt = <1800000>;
+  regulator-always-on;
+};
 
-	&mmc1 {
-	vmmc-supply = <&vmmcsd_fixed>;
-	};
+&mmc1
+{
+  vmmc-supply = <&vmmcsd_fixed>;
+};
 
-	&mmc2 {
-	vmmc-supply = <&vmmcsd_fixed>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&emmc_pins>;
-	bus-width = <8>;
-	status = "okay";
-	ti,vcc-aux-disable-is-sleep;
-	};
+&mmc2
+{
+  vmmc-supply = <&vmmcsd_fixed>;
+  pinctrl-names = "default";
+  pinctrl-0 = <&emmc_pins>;
+  bus-width = <8>;
+  status = "okay";
+  ti,vcc-aux-disable-is-sleep;
+};
 
-	&am33xx_pinmux {
-		pinctrl-0 = <&pinctrl_lpc_bb_sp1>;
+&am33xx_pinmux
+{
+  pinctrl-0 = <&pinctrl_lpc_bb_sp1>;
 
-		pinctrl_lpc_bb_sp1: pinmux_lpc_bb_sp1_pin {
-			pinctrl-single,pins = < 0x1B4 0x7 >;
-		};
+  pinctrl_lpc_bb_sp1: pinmux_lpc_bb_sp1_pin
+  {
+    pinctrl-single,pins = < 0x1B4 0x7 >;
+  };
 
-		pinctrl_gpio_keys: pinmux_gpio_keys_pins {
-			pinctrl-single,pins = <
-				0x030 0x37	/* GPIO1_12 BBB_Control_Pin */
-			>;
-		};
+  pinctrl_gpio_keys: pinmux_gpio_keys_pins
+  {
+    pinctrl-single,pins = <
+      0x030 0x37  /* GPIO1_12 BBB_Control_Pin */
+    >;
+  };
 
-		pinctrl_poweroff_pins: pinmux_gpio_poweroff_pins {
-			pinctrl-single,pins = <
-				0x024 0x0f	/* GPIO0_23 BBB_Alive_Pin */
-			>;
-		};
+  pinctrl_poweroff_pins: pinmux_gpio_poweroff_pins
+  {
+    pinctrl-single,pins = <
+      0x024 0x0f  /* GPIO0_23 BBB_Alive_Pin */
+    >;
+  };
 
-		/*NL_nni: SPI1 (ADC) & SPI0 added */
-		pinctrl_spi0: pinmux_spi0_pins {
-			pinctrl-single,pins = <
-				0x150 0x30	/* SPI0_CLK */
-				0x154 0x30	/* SPI0_D0 */
-				0x158 0x10	/* SPI0_D1 */
-				0x15C 0x17 /* SPI0_CS0 */
-				/* 0x15C 0x10 /* SPI0_CS0 */
-				0x178 0x37	/* LPC_PRQ uart1_ctsn.gpio0_12, INPUT | MODE7 */
-				0x17C 0x37	/* LPC_RDY uart1_rtsn.gpio0_13, INPUT | MODE7 */
-				0x164 0x37	/* LPC_HB */
-			>;
-		};
+  /*NL_nni: SPI1 (ADC) & SPI0 added */
+  pinctrl_spi0: pinmux_spi0_pins
+  {
+    pinctrl-single,pins = <
+      0x150 0x30  /* SPI0_CLK */
+      0x154 0x30  /* SPI0_D0 */
+      0x158 0x10  /* SPI0_D1 */
+      0x15C 0x17 /* SPI0_CS0 */
+      /* 0x15C 0x10 /* SPI0_CS0 */
+      0x178 0x37  /* LPC_PRQ uart1_ctsn.gpio0_12, INPUT | MODE7 */
+      0x17C 0x37  /* LPC_RDY uart1_rtsn.gpio0_13, INPUT | MODE7 */
+      0x164 0x37  /* LPC_HB */
+    >;
+  };
 
-		pinctrl_spi1: pinmux_spi1_pins {
-			pinctrl-single,pins = <
-				0x190 0x23	/* SPI1_CLK */
-				0x194 0x23	/* SPI1_D0 */
-				0x198 0x13	/* SPI1_D1 */
-				/* 0x19C 0x13	 SPI1_CS0 - used by mSPI */
-				0x19C 0x17	/* ESPI_SAP */
-				0x44  0x17	/* ESPI_DMX */
-				0x1A4 0x2F	 /* P9_27 should be input */
-				0x8C 0x7	/* OLED_DC gpmc_clk_mux0.gpio2_1, OUTPUT | MODE7 */
-				0x28 0x7	/* OLED_CS gpmc_ad10.gpio0_26, OUTPUT | MODE7 */
-				0x3c 0x7	/* ADC_CS gpmc_ad15.gpio1_15, OUTPUT | MODE7 */
-				0x184 0x7	/* SCS0_A..C */
-				0x1AC 0x7
-				0x180 0x7
-				0x70 0x7	/* SCS1_A..C */
-				0x78 0x7
-				0x74 0x7
-			>;
-		};
-	};
+  pinctrl_spi1: pinmux_spi1_pins
+  {
+    pinctrl-single,pins = <
+      0x190 0x23  /* SPI1_CLK */
+      0x194 0x23  /* SPI1_D0 */
+      0x198 0x13  /* SPI1_D1 */
+      /* 0x19C 0x13  SPI1_CS0 - used by mSPI */
+      0x19C 0x17  /* ESPI_SAP */
+      0x44  0x17  /* ESPI_DMX */
+      0x1A4 0x2F   /* P9_27 should be input */
+      0x8C 0x7  /* OLED_DC gpmc_clk_mux0.gpio2_1, OUTPUT | MODE7 */
+      0x28 0x7  /* OLED_CS gpmc_ad10.gpio0_26, OUTPUT | MODE7 */
+      0x3c 0x7  /* ADC_CS gpmc_ad15.gpio1_15, OUTPUT | MODE7 */
+      0x184 0x7 /* SCS0_A..C */
+      0x1AC 0x7
+      0x180 0x7
+      0x70 0x7  /* SCS1_A..C */
+      0x78 0x7
+      0x74 0x7
+    >;
+  };
+  
+  /* KSTR : UART5 added */
+  uart5_pins: pinmux_uart0_pins
+  {
+    pinctrl-single,pins = <
+      0x0C0 (PIN_OUTPUT_PULLDOWN | MUX_MODE4)  /* uart5_TXD */
+      0x0C4 (PIN_INPUT_PULLUP    | MUX_MODE4)  /* uart5_RXD */
+    >;
+  };
+};
 
-	/* NL_nni: SPI1 & SPI0 added */
-	&spi0 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	status = "okay";
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_spi0>;
+/* NL_nni: SPI1 & SPI0 added */
+&spi0
+{
+  #address-cells = <1>;
+  #size-cells = <0>;
+  status = "okay";
+  pinctrl-names = "default";
+  pinctrl-0 = <&pinctrl_spi0>;
 
-	spi0_0{
-		#address-cells = <1>;
-		#size-cells = <0>;
-		compatible ="lpc_bb_driver";
-		reg = <0>;
-		spi-max-frequency=<24000000>;
-		rdy-gpio = <&gpio0 13 0>;
-		prq-gpio = <&gpio0 12 0>;
-		lpc-hb-gpio = <&gpio0 7 0>;
-		lpc-spare-gpio = <&gpio0 20 0>;
-		lpc-cs-gpio = <&gpio0 5 0>;
-		};
-	};
+  spi0_0
+  {
+    #address-cells = <1>;
+    #size-cells = <0>;
+    compatible ="lpc_bb_driver";
+    reg = <0>;
+    spi-max-frequency=<24000000>;
+    rdy-gpio = <&gpio0 13 0>;
+    prq-gpio = <&gpio0 12 0>;
+    lpc-hb-gpio = <&gpio0 7 0>;
+    lpc-spare-gpio = <&gpio0 20 0>;
+    lpc-cs-gpio = <&gpio0 5 0>;
+  };
+};
 
-	&spi1 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	status = "okay";
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_spi1>;
+&spi1
+{
+  #address-cells = <1>;
+  #size-cells = <0>;
+  status = "okay";
+  pinctrl-names = "default";
+  pinctrl-0 = <&pinctrl_spi1>;
 
-	cs0-device {
-		#address-cells = <1>;
-		#size-cells = <0>;
-		compatible ="espi_driver", "spidev";
-		reg = <0>;
-		prop1="Wert von Prop1";
-		prop2=<12345>;
+  cs0-device
+  {
+    #address-cells = <1>;
+    #size-cells = <0>;
+    compatible ="espi_driver", "spidev";
+    reg = <0>;
+    prop1="Wert von Prop1";
+    prop2=<12345>;
 
-		spi-max-frequency=<24000000>;
-		/* NL_nni: eSPI hub specific GPIOs */
-		scs-gpios = <   &gpio0 15 0
-				&gpio3 21 0
-				&gpio0 14 0
-				&gpio0 30 0
-				&gpio1 28 0
-				&gpio0 31 0
-			>;
-		sap-gpio = <&gpio3 17 0>;
-		dmxs-gpio = <&gpio1 17 0>;
-		};
-	};
+    spi-max-frequency=<24000000>;
+    /* NL_nni: eSPI hub specific GPIOs */
+    scs-gpios = <   &gpio0 15 0
+        &gpio3 21 0
+        &gpio0 14 0
+        &gpio0 30 0
+        &gpio1 28 0
+        &gpio0 31 0
+      >;
+    sap-gpio = <&gpio3 17 0>;
+    dmxs-gpio = <&gpio1 17 0>;
+  };
+};
+
+/* KSTR : UART5 added */
+&uart5
+{
+  pinctrl-names = "default";
+  pinctrl-0 = <&uart5_pins>;
+  status = "okay";
+};
