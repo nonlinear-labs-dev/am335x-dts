@@ -15,7 +15,7 @@ endif
 DTC=$(HOSTDIR)/usr/bin/dtc
 CPP=$(HOSTDIR)/usr/bin/arm-linux-gcc
 
-TARGETS = nonlinear-labs-3.dtb
+TARGETS = nonlinear-labs-2D.dtb
 
 SRCARCH = arm
 DOT_TARGET = $(dir $@).$(notdir $@)
